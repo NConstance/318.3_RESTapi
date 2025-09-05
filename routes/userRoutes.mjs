@@ -35,11 +35,32 @@ router
 //  @route GET /api/users/:id
 //  @desc Get ONE user
 //  @access Public
-router.route("/:id").get((req, res, next) => {
-  const user = users.find((user) => user.id == req.params.id);
+router
+  .route("/:id")
+  .get((req, res, next) => {
+    const user = users.find((user) => user.id == req.params.id);
 
-  if (user) res.json(user);
-  else next();
-});
+    if (user) res.json(user);
+    else next();
+  })
+  .patch((req, res, next) => {
+    // find the user that the client wants to change
+    const id = req.params.id;
+    const data = req.body;
+
+    const user = users.find((user, i) => {
+      if (user.id == id) {
+        for (const item in data) {
+          users[i][item] = data[item]; // make the changes
+        }
+        return true;
+      }
+    });
+
+    // send a response back to the client
+    if (user) {
+      res.json(users);
+    } else next();
+  });
 
 export default router;

@@ -43,6 +43,59 @@ router
     if (post) res.json(post);
     else next();
   })
-  .patch((req, res) => {});
+  .patch((req, res, next) => {
+    // find the item that the client wants to update
+    const id = req.params.id;
+    const data = req.body;
+    const post = posts.find((post, i) => {
+      if (post.id == id) {
+        for (const item in data) {
+          // in the posts array grab the post that the client wants to change
+          posts[i][item] = data[item]; // make the change
+        }
+        return true;
+      }
+    });
+
+    // send a response
+    if (post) {
+      res.json(posts);
+    } else next();
+  });
 
 export default router;
+
+/*
+.patch((req, res, next) => {
+    // Within the PATCH request route, we allow the client
+    // to make changes to an existing user in the database.
+    const user = users.find((u, i) => {
+      if (u.id == req.params.id) {
+        for (const key in req.body) {
+          users[i][key] = req.body[key];
+        }
+        return true;
+      }
+    });
+
+    if (user) res.json(user);
+    else next();
+  })
+ */
+
+/*
+.patch((req, res, next) => {
+    // Within the PATCH request route, we allow the client
+    // to make changes to an existing post in the database.
+    const post = posts.find((p, i) => {
+      if (p.id == req.params.id) {
+        for (const key in req.body) {
+          posts[i][key] = req.body[key];
+        }
+        return true;
+      }
+    });
+
+    if (post) res.json(post);
+    else next();
+ */
