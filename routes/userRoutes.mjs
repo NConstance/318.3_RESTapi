@@ -61,6 +61,21 @@ router
     if (user) {
       res.json(users);
     } else next();
+  })
+  .delete((req, res, next) => {
+    // find user the client wants to delete
+    const id = req.params.id;
+    const user = users.find((user, i) => {
+      if (user.id == id) {
+        users.splice(i, 1); // remove the user at index i
+        return true;
+      }
+    });
+
+    // send a response back to the client
+    if (user) {
+      res.json(users);
+    } else next();
   });
 
 export default router;
